@@ -1,0 +1,1015 @@
+palette:
+  type-1: '#ffda8a'
+  type-2: '#00eddd'
+  type-3: '#f244aa'
+  # type-3: '#d984ed'
+  type-4: '#5fa9de'
+  type-5: '#fd971f'
+  type-6: '#c485ff'
+  type-7: '#03d28d'
+  type-8: '#89f0f5'
+  type-9: '#d8fc44'
+  type-10: '#ffc400'
+  type-11: '#ffbfff'
+  type-12: '#df99f0'
+  type-13: '#96c9ff'
+  type-14: '#70d4ff'
+  status-1: '#ff2305'
+  status-2: '#d97000'
+  status-3: '#e3a200'
+  status-4: '#cab902'
+  status-5: '#d6da2c'
+  status-6: '#79bf02'
+  status-7: '#28c501'
+  status-8: '#87d700'
+  status-9: '#00ffff'
+  status-10: '#ff4d8d'
+  status-11: '#0dbaff'
+  status-12: '#ffda8a'
+  status-13: '#1fffbc'
+  status-14: '#91e0ff'
+  status-15: '#ffbfff'
+
+
+# Color Palette: type-3: '#ed42a6 status-13: '#eb42a5' # type-3: f#ef2e9f #57cdff #70d4ff #91e0ff #ff8c00(old type-5)#fd971f status-10: #ff337d #ff4d8d (type-8)#9efbff
+# color: f#8670ff # color: bold f#8a75ff  # color: f#c485ff   # color: f#ff4d8d # color: bold f#8a75ff  # color: f#ff4d8d #ff4085 status-15:#ffd6ff type-6: '#d992ff'
+
+rules:
+- description: Numbers (#fcb58d)
+  regex: \b(?<!\.)\d+(\.\d+)?(?!\.)\b
+  color: f.type-1
+
+- description: URL
+  regex: |
+    (?ix)\b
+        ((htt|ft|lda)ps?|telnet|ssh)://  # Scheme
+        ([-%:\w\\/]{1,256}@)?  # User info
+        [-\w]{1,63}(\.[-\w]{1,63}){,126}(:\d{1,5})?  # Host and port
+        (/[-+=~@%&?#.:;,\w\\/()]*)?  # Path, query, and fragment
+    ((?=[.:;,)])|\b)  # Avoid highlighting trailing path characters by matching them in a lookahead
+  # color: f.type-4
+  color: f.type-14
+  exclusive: true
+
+- description: IPv4
+  regex: \b(?<!\.)((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d)(/\d+)?\b
+  color: f.type-2
+  # color: f#00e0d1
+  exclusive: true
+
+- description: IPv6
+  regex: |
+    (?ix)(?<![\w:])(
+        ([\da-f]{1,4}:){7}[\da-f]{1,4}|  # 1:2:3:4:5:6:7:8
+        [\da-f]{1,4}:(:[\da-f]{1,4}){1,6}|  # 1::3:4:5:6:7:8
+        ([\da-f]{1,4}:){1,2}(:[\da-f]{1,4}){1,5}|  # 1:2::4:5:6:7:8
+        ([\da-f]{1,4}:){1,3}(:[\da-f]{1,4}){1,4}|  # 1:2:3::5:6:7:8
+        ([\da-f]{1,4}:){1,4}(:[\da-f]{1,4}){1,3}|  # 1:2:3:4::6:7:8
+        ([\da-f]{1,4}:){1,5}(:[\da-f]{1,4}){1,2}|  # 1:2:3:4:5::7:8
+        ([\da-f]{1,4}:){1,6}:[\da-f]{1,4}|  # 1:2:3:4:5:6::8
+        ([\da-f]{1,4}:){1,7}:|  # 1:2:3:4:5:6:7::
+        :((:[\da-f]{1,4}){1,7}|:)  # ::2:3:4:5:6:7:8
+    )(:(?=\W))?  # \W is an exclusive-flag hack to color the : before an IPv4-embedded address
+    (%[\da-z]+)?  # Zone index
+    (/\d+)?  # Prefix length
+    (?!:?\w)
+  color: f.type-3
+  exclusive: true
+
+- description: MAC address
+  regex: |
+    (?ix)\b(
+        (?<!:)([\da-f]{1,2}:){5}[\da-f]{1,2}(?!:)|  # 11:22:33:aa:bb:cc
+        (?<!\.)([\da-f]{4}\.){2}[\da-f]{4}(?!\.)|   # 1122.33aa.bbcc
+        (?<!\.)([\da-f]{1,2}\.){5}[\da-f]{1,2}(?!\.)| # 00.15.a5.00.01.bf
+        ^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$
+    )\b
+  # color: f.type-13
+  color: f.status-15
+  exclusive: true
+
+- description: Date
+  regex: |
+    (?ix)\b(
+        (\d{2}|\d{4})\-(0?[1-9]|1[0-2])\-(3[0-1]|[1-2]\d|0?[1-9])|  # YYYY-MM-DD, YY-MM-DD
+        (jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(  # MMM
+            (3[0-1]|[1-2]\d|0?[1-9])(\s+\d{4})?|\d{4}  # DD (YYYY)?, YYYY
+        )|(3[0-1]|[1-2]\d|0?[1-9])\s(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(?!\s+(3[0-1]|[1-2]\d|0?[1-9])([^\w:]|$))(\s+\d{4})?  # DD MMM (YYYY)?
+    )((?=[\WT_])|$)
+  # color: b.type-2
+  color: f.status-9
+  exclusive: true
+
+- description: Time
+  regex: |
+    (?ix)(?<![\.:])(\b|(?<=T))
+        (2[0-3]|[0-1]\d):[0-5]\d  # Hours and minutes
+        (:[0-5]\d([\.,]\d{3,6})?)?  # (Seconds (sub-seconds, 3 to 6 decimal places)?)?
+        ([\-\+](\d{2}|\d{4}))?  # (Timezone)?
+    (?![\.:])\b
+  # color: f.type-5
+  color: f.type-10
+  exclusive: true
+
+- description: Size, like 123G 123Gb 123Gib 1.23G 123Gbps
+  regex: (?i)\b\d+(\.\d+)?\s?((([KMGTPEZY](i?B)?)|B)(ps)?)\b
+  color:
+    0: f.type-11
+    2: bold
+  exclusive: true
+
+- description: Match (IP.Port) Number-- new one
+  regex: (?:\.([0-9]+))?
+  color: f#ffd270
+  # color: f.type-11
+  exclusive: True
+
+- description: Match HEX (0x46d7839e) Number-- newly Added (we can use type 18 also)
+  regex: \b(0x[0-9A-Fa-f]+)\b
+  # color: f#ffd250
+  color: f#96c9ff
+  exclusive: True
+
+- description: Generic - Bad
+  regex: (?i)\b(password|abnormal(ly)?|down|los(t|s|ing)|err(ors?)?|(den(y|ies|ied)?)|reject(ing|ed)?|drop(ped|s)?|(err\-)?disabled?|(timed?\-?out)|fail(s|ed|iure)?|disconnect(ed)?|unreachable|invalid|bad|notconnect|unusable|block(ing|ed)?|blk|inaccessible|wrong|collisions?|unsynchronized|mismatch|runts|CRC|locked|Locked|Initialise|uncorrectable|drop_count|KR|refused|FLR|badpackets|admin_fec|admin_duplex|FDB|pop_outer_tag|Expiration|RESTRICTED|Production|SUBOPTIMAL|leave|DRIFT|Attackers|burst)\b
+  color: f.status-1
+
+- description: Generic -  Bad2
+  regex: (?i)\b(unregister|ngfw|Teardown|ERR|BundleDataPorts|reinitConnect|full|xerr|rerr|Uninstall|deleteNonPresent|Delete|INVALID_SPI|DELETE_REASON|expired|dead|Dead|errorDescr|Inoperable|Remove|END|disabling|exiting|Uninstallation|VIF_DOWN|Retrying|Retry|Delay|Voltage|reinitConnections|Unable|watchdog_init|Watchdog|excessive|UPDOWN|pid|Oversize|Jabber|filters|Uninstalling|flowend|Inactive|Invalids|Termination|Deadline|exceeds|exceed|Died)\b
+  color: f.status-1
+
+- description: Generic - Ambigious bad
+  regex: (?i)\b(no(pe)?|exit(ed)?|reset(t?ing)?|discard(ed|ing)?|block(ed|ing)?|filter(ed|ing)?|stop(p(ed|ing))?|never|bad|CRIT)\b
+  # color: f.status-3
+  color: f.status-1
+
+- description: Generic - Not too bad
+  regex: (?i)\b(warnings?)\b
+  color: f.status-4
+
+- description: Generics - Not too bad-2
+  regex: (?i)\b(SN|Stp|SN|daemon|Daemon|SFDataCorr+|EventHandl+|warning(s)?)\b
+  color: f.status-8
+
+- description: Generic - Ambigious good
+  regex: (?i)\b(ye(s|ah?|p)?|started|running|good|can|LISTEN|InitSPI|curr|ONLINE|received|NPSHIM)\b
+  color: f.status-6
+
+- description: Generic - Good
+  regex: (?i)\b(up|ok(ay)?|permit(ed|s)?|accept(s|ed)?|enabled?|online|succe((ss(ful|fully)?)|ed(ed)?)?|connect(ed)?|reachable|valid|forwarding|synchronized)\b
+  color: f.status-8
+
+- description: Interface - Description (Purple)
+  regex: Description:\s.*
+  color: f.type-6
+
+#JUNOS
+# Security Policies
+- description: Security policies (white) from-zone (Light Green) to-zone (Light Red) policy (Bright Green)
+  regex: (set security policies) (from-zone [a-zA-Z0-9_-]+ )(to-zone [a-zA-Z0-9_-]+ )(policy [a-zA-Z0-9_-]+ )
+  color:
+    1: f#FFFFFF
+    2: f#00F969 bold
+    3: f#ff2305 bold
+    4: f#6CFF00 bold
+
+- description: Security Policies - Description (Light Blue)
+  regex: (description ["\/a-zA-Z0-9\.\s_\*(),-]+)$   #"
+  color: f#00D1DB bold
+
+# - description: Security Policies - Match|Then (White)
+#   regex: (match|then)
+#   # color: f#FFFFFF
+#   color: f#ff4d8d
+
+- description: Security Policies - Source-Adress (Light Green)
+  regex: (source-address [\/a-zA-Z0-9\._-]+)?
+  color: f#00F969 bold
+
+- description: Security Policies - Destination-Adress (Light Red)
+  regex: (destination-address [\/a-zA-Z0-9\._-]+)?
+  color: f#ff2305 bold
+
+- description: Security Policies - Application (Purple)
+  regex: (application [\/a-zA-Z0-9\._-]+)?
+  color: f#ed42a6 bold
+
+# Show interface
+- description: Interface - Physical Interface (Bright Green)
+  regex: '^Physical interface: [a-zA-Z0-9/-]+'
+  color: f#6CFF00
+
+- description: Interface - Physical Link Status Up (Bright Green) Down (Red)
+  regex: Physical link is ((Up)|Down)
+  color:
+    1: f#ff2305 bold
+    2: f#6CFF00
+
+- description: Interface - Last Flapped (Light Blue)
+  regex: Last flapped\s+:\s.*$
+  color: f#00D1DB bold
+
+- description: Interface - Input rate (Light Green)
+  regex: Input rate\s*:\s[0-9]+ bps \([0-9]+ pps\)
+  color: f#00F969 bold
+
+- description: Interface - Output rate (Red)
+  regex: Output rate\s*:\s[0-9]+ bps \([0-9]+ pps\)
+  color: f#6CFF00 bold
+
+- description: Interfaces internal Match-3
+  regex: \b(Internal\d/\d{1,2}\.\d{1,10}|Internal\d/\d{1,2})\b
+  color: f.type-9
+
+## ARISTA / CISCO
+# General
+# - description: Cisco MAC Address Notation (Purple)
+#   regex: ([0-9a-f]{4}\.[0-9a-f]{4}\.[0-9a-f]{4}).*
+#   color: f#ed42a6
+
+# show run
+- description: Interfaces in shutdown (Red) no shutdown (Bright Green)
+  regex: ((\s\sshutdown)|\s\sno shutdown)
+  color:
+    1: f#6CFF00
+    2: f#ff2305 bold
+
+- description: route-map name (Light Blue)
+  regex: (route-map\s[a-zA-Z0-9_-]+)
+  color: f#00D1DB bold
+
+- description: route-map permit (Bright Green) or deny (Red)
+  regex: \s(permit)|(deny)\s
+  color:
+    1: f#6CFF00
+    2: f#ff2305 bold
+
+- description: route-map permit seq number (Light Blue)
+  regex: \s(permit|deny)\s([0-9]+)$
+  color:
+    1: f#00D1DB bold
+    2: f#ff2305 bold
+
+- description: route-map set clauses (Light Green)
+  regex: \s\sset .*
+  color: f#00F969
+
+- description: prefix-list name (Purple)
+  regex: (prefix-list\s[a-zA-Z0-9_-]+)
+  color: f#ed42a6 bold
+
+- description: prefix-list Matching prefixes eq|gre (Light Green)
+  regex: \s(eq\s[0-9]+|ge\s[0-9]{1,2}|le\s[0-9]+)
+  # color: f#00F969
+  color: f#8a75ff
+
+- description: ip access-list Name (Purple)
+  regex: ip access-list ([a-zA-Z0-9_-]+)
+  color: f#ed42a6 bold
+
+- description: vrf name (Light Green)
+  regex: \s\s\svrf .*
+  color: f#00F969
+
+- description: local-as number (Purple)
+  regex: local-as .*
+  color: f#ed42a6 bold
+
+
+# Interfaces
+- description: show interfaces description. Interface status in (Red)
+  regex: (\s\s\sdown|notpresent|lowerlayerdown|admin\sdown)
+  color: f#ff2305 bold
+
+- description: show interfaces description - Interface name (Bright Green)
+  regex: (Et[0-9]+|Lo[0-9]|Ma[0-9]|Po[0-9]+|Vl[0-9]+)
+  color: f#6CFF00
+
+- description: show run (To match inteface... ET VLAN, ETC) (Bright Green)
+  regex: ^interface.*
+  color: f#6CFF00
+
+- description: show run (To match vrf forwarding name) (Light Green)
+  regex: \s\svrf forwarding (.*)$
+  color:
+    1: f#00F969
+
+- description: Interface - Physical status Up (Bright Green) Down (Red)
+  regex: ((^Ethernet[0-9]+ is up)|^Ethernet[0-9]+ is down)
+  color:
+    1: f#ff2305 bold
+    2: f#6CFF00
+
+- description: Interface - Line Protocol Up(Bright Green) Down|lowerl (Red)
+  regex: ((line protocol is down.*$)|(line protocol is lowerlayer.*)|line protocol is up.*$)
+  color:
+    1: f#6CFF00
+    2: f#ff2305 bold
+    3: f#ff2305 bold
+
+- description: Interface - Last time it went Up (Bright Green) or Down (Red)
+  regex: (^\s\sUp\s.*)|(^\s\sDown\s.*)
+  color:
+    1: f#6CFF00
+    2: f#ff2305 bold
+
+
+# show ip bgp summary
+- description: Matches not Established bgp states (Red)
+  regex: \b((Idle.*)|(Active)|(Connect)|(Estab[l]?))\b
+  color:
+    1: f#6CFF00
+    2: f#ff2305 bold
+    3: f#ff2305 bold
+    4: f#ff2305 bold
+
+- description: show ip bgp summary Local AS Number (Purple)
+  regex: \slocal AS number ([0-9].*)$
+  color:
+    1: f#F701FF bold
+
+- description: show ip bgp VRF NAME (Light Green)
+  regex: ^BGP summary information for (VRF .*)$
+  color:
+    1: f#00F969
+
+- description: show ip route VRF NAME (Light Green)
+  regex: '^VRF name: .*'
+  color: f#00F969
+
+- description: show ip route Interface NAME (Bright Green)
+  regex: ', (Vlan[0-9]+$|Ethernet[0-9]+$)'
+  color:
+    1: f#6CFF00
+
+- description: Security Policies - log (Red)
+  regex: (log [/a-zA-Z0-9\._-]+)?$
+  color: f#ff2305 bold
+
+- description: Security Policies - deny (Red Italic Style)
+  regex: deny$
+  color: f#ff2305 bold italic
+
+- description: HostName/Prompt
+  regex: \b^\w[^>]*#|hostname\b
+  color: f.type-8
+  # color: bold f#ffd270
+
+- description: Hostnames and prompt - good - new value
+  regex: \/\w+
+  # color: f.type-3
+  color: f.type-11
+
+- description: HostName/Prompt-2
+  regex: \b(^[a-zA-Z0-9_/-]*$)\b
+  # color: f.type-6
+  color: f#c485ff
+
+- description: HostName/Prompt-3
+  regex: \b(\[[a-zA-Z0-9]*\])\b
+  color: f#75f2f4
+
+- description: HostName Bracket Match
+  regex: \(([^)]+)\)
+  # color: f.type-6
+  color: f#c485ff
+
+- description: HostName NOT_In_Enable_mode - This regex also highlight words within < >
+  regex: ^\w[^#]*>
+  color: f.type-4
+
+- description: HostName Bracket Match-2
+  regex: \b\/([a-zA-Z0-9]{0,})\b
+  # color: f.type-6
+  color: f#c485ff
+
+- description: Hostnames and prompt - good -new values
+  regex: \/([a-z0-9]{0,})
+  # color: f.type-3
+  # color: f.type-14
+  # color: f#ffde9c
+  color: f#ff9b30
+
+- description: Half-duplex
+  regex: (?i)\b(half\-?duplex)\b
+  color: f.status-1
+
+- description: Spanning tree - Problematic states
+  regex: \b(BKN|(LOOP|ROOT|TYPE|PVID)_Inc)\b
+  color: f.status-1
+
+- description: Spanning tree - Forwarding states
+  regex: (?i)\b(FWD|Root|Desg|user_data|sack|Syslogs|Origin|pc_membership_status)\b
+  color: f#87d700
+
+- description: OSPF - Transitional states
+  regex: \b(ATTEMPT|INIT|EXCHANGE|LOADING)\b
+  color: f#cab902
+
+- description: OSPF - Acceptable states
+  regex: \b(2WAY|FULL)\b
+  color: f#28c501
+
+- description: BGP - Transitional states
+  regex: \b(Idle|Connect|Active|OpenSent|OpenConfirm|Translated)\b
+  color: f#cab902
+
+# Based on .chromatermrc from https://notx.ml/Own_projects/Highlighting_Cisco_keywords_or_output_on_Linux/
+# Translated to YAML in https://github.com/hSaria/ChromaTerm/pull/79
+
+- description: Interfaces
+  regex: (?i)\b(([fgx]e|et|gr|ip|[lm]t|lsq|sp|vcp)\-\d+/\d+/\d+|((b?me|em|fab|fxp|fti|lo|pp[de]?|st|swfab)[0-2]|dsc|gre|ipip|irb|jsrv|lsi|mtun|pim[de]|tap|vlan|vlans|vme|vtep)|(ae|reth)\d*)(\.\d+)?\b
+  color: f#03d28d
+  exclusive: true
+
+- description: Interfaces
+  regex: (?i)\b((Management|mgmt)\d{1,3}(/\d{1,3})*(\.\d{1,10})*)\b
+  color: f.status-1
+
+- description: Interfaces
+  regex: (?i)\b((Hundred|TwentyFive)GigE\d{1,3}(/\d{1,3})*(\.\d{1,10})*|((Forty|Ten)*Gigabit|Fast)*Ethernet\d{1,3}(/\d{1,3})*(\.\d{1,10})*|(Internal\-(Control|Data)|Serial|Twe|Eth|Hu|Tw|Fo|Te|Gi|Fa|Et|Se|eth)\d{1,3}(/\d{1,3})*(\.\d{1,10})*)\b
+  # color: f#ffbd96
+  color: f#96d9ff
+  # color: f#96c9ff
+  exclusive: false
+
+- description: IP-address:nn RD or RT
+  regex: \b(RT:)?((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d):[1-9]\d{,4}\b
+  color: f#00e0d1
+  exclusive: true
+
+- description: VPNv4 Addresses
+  regex: \b((\d{1,10}:){2}((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d)|((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d):\d{1,10}:((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d))\b
+  color: f#00e0d1
+  exclusive: true
+
+- description: VPNv6 Addresses
+  regex: (?i)\[(\d{1,10}|\d{1,3}(\.\d{1,3}){3}):\d{1,10}\](([\da-f]{1,4}:){7}[\da-f]{1,4}|[\da-f]{1,4}:(:[\da-f]{1,4}){1,6}|([\da-f]{1,4}:){1,2}(:[\da-f]{1,4}){1,5}|([\da-f]{1,4}:){1,3}(:[\da-f]{1,4}){1,4}|([\da-f]{1,4}:){1,4}(:[\da-f]{1,4}){1,3}|([\da-f]{1,4}:){1,5}(:[\da-f]{1,4}){1,2}|([\da-f]{1,4}:){1,6}:[\da-f]{1,4}|([\da-f]{1,4}:){1,7}:|:((:[\da-f]{1,4}){1,7}|:)|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d)|([\da-f]{1,4}:){1,4}:((25[0-5]|(2[0-4]|[0-1]?\d)?\d)\.){3}(25[0-5]|(2[0-4]|[0-1]?\d)?\d))(?![:.\w])
+  color: f#ef2e9f
+  exclusive: true
+
+- description: Uptime, like 10d23h 5w3d
+  regex: \b(\d{1,5}w\dd|\d{1,5}d\d{1,2}h)\b
+  color: f#ff8c00
+
+- description: Interfaces
+  regex: (?i)\b(((Hu(ndredGigabit)?|Fo(rtyGigabit)?|Te(nGigabit)?|Gi(gabit)?|Fa(st)?)(Ethernet)?)|Eth|Se(rial)?|Lo(opback)?|Tu(nnel)?|VL(AN)?|Po(rt-channel)?|Vi(rtual\-(Template|Access))?|Mu(ltilink)?|Di(aler)?|[BN]VI)(\d+/){,2}\d+(\.\d+)?\b
+  color: f#ffbfff
+  exclusive: false
+
+- description: Bad responses
+  regex: (?i)\b(administratively|down|fail|failed|not|not active|not activated|bad|never|BLK|fddi|n\-isl|isl|notconnect|blocking|\(tdp\)|tdp|TDP|denied|invalid|err\-disabled|disabled|unusable|DENIED|err\-disable|infinity|inaccessible|wrong|cannot|MM_NO_STATE|MM_KEY_EXCH|UP\-NO\-IKE|K[13]=(\d{2,3}|[02-9])|K[245]=[1-9]\d{,2})\b
+  color: f.status-1
+
+- description: Good responses
+  regex: \b(rstp|best|our_master|UP\-ACTIVE|\*\>|root|Root|802\.1q|connected|LocalT|yes|forwarding|synchronized|active|rapid\-pvst|up|Up|UP|allowed_vlan|Transmit)\b
+  color: f#28c501
+
+- description: Possible warning and other things that deserve attention
+  regex: \b(Total output drops:\s[1-9]\d*|[1-9]\d* ((input |output )?errors|runts|CRC|(late )?collisions|unknown protocol drops)|err(ors?)?|reset|act\/unsup|dhcp|DHCP|mismatch|notconnect|dropped|LRN|learning|listening|LIS|unsynchronized|Peer\(STP\)|Shr|Edge|pvst|ieee|Bound\(PVST\)|TFTP|Mbgp|LAPB|l2ckt\(\d{1,10}\)|D[CT]E|passive|r |RIB\-failure|discriminator|Standby|aggregate(d|\/\w+)|atomic\-aggregate|\(global\)|tag|key-chain|md5|backup\/repair|repair|v2\/S?D|Condition\-map|Advertise\-map|no\-advertise|no\-export|local\-AS|internet|shaper|oper_duplex|native_vlan)\b
+  color: f#cab902
+
+- description: Syslog facilities - Emergency to error
+  regex: \b%\w+\-[0-3]\-\w+\b
+  color: f#ff2305
+
+- description: Syslog facilities - Warning to notice
+  regex: \b%\w+\-[4-5]\-\w+\b
+  color: f#cab902
+
+- description: Syslog facilities - Info to debug
+  regex: \b%\w+\-[6-7]\-\w+\b
+  color: f#65d7fd
+
+- description: BGP
+  regex: \b(Cost:pre\-bestpath|0x880\d):\d{1,10}:\d{1,10}\b
+  # color: f#cfbaba
+  color: f#00F969
+
+- description: BGP Part 2
+  regex: \b(%BGP(_SESSION)?\-\d\-\w+|bgp|BGP|B|IGP|incomplete|\d{2,7}\/nolabel\(\w+\)|RR\-client|Originator|cluster\-id|Cluster\-id|Route\-Reflector)\b
+  color: f#4c61ff
+
+- description: OSPFv2 and OSPFv3
+  regex: \b(OSPF_VL\d{1,2}|OSPF_SL\d{1,2}|VL\d{1,2}|SL\d{1,2}|Type\-\d|ospf|OSPF|O|IA|E[12]|N[12]|P2P|P2MP|BDR|DR|ABR|ASBR|LOOP|DROTHER|POINT_TO_POINT|POINT_TO_MULTIPOINT|BROADCAST|NON_BROADCAST|LOOPBACK|SHAM_LINK|3101|1587|transit|Transit|nssa|NSSA|stub|Stub|Superbackbone|OSPFv3_VL\d{1,2}|OSPFv3\-\d{1,5}\-IPv6|ospfv3|OSPFv3|OI|OE[12]|ON[12]|V6\-Bit|E\-Bit|R\-bit|DC\-Bit|opaque|DROTH|%OSPF(V3)?\-\d\-\w+)\b
+  # color: f#ff8c00
+  color: f#0dbaff
+
+- description: EIGRP
+  regex: \b(Signing|getBootSsposMode|getInstallableMo|pc_protocol|EIGRP\-IPv6|EIGRP\-IPv4|eigrp|EIGRP|EX|D|K[13]=1|K[245]=0|Internal|L1|L2|External|%DUAL\-\d\-\w+)\b
+  color: f#00d9d9
+
+- description: RIP
+  regex: \b(Asymmetric|raw|rip|R(IP)?)\b
+  color: f#ff2305
+
+- description: Multicast
+  regex: \b((PIM\/IPv4|RP\:|v2\/S|BSR)|%(PIM|MSDP|IGMP)\-\d\-\w+)\b
+  color: f#ef2e9f
+
+- description: LDP
+  regex: \b%(LDP|LSD)\-\d\-\w+\b
+  color: f#ef2e9f
+
+- description: IPv6 Neighbor Discovery
+  regex: \b%IPV6_ND\-\d\-\w+\b
+  color: f#ef2e9f
+
+- description: Routing table metrics
+  regex: \b\[\d{1,3}\/\d{1,12}\]\b
+  color: f#cab902
+
+- description: EIGRP topology table metrics and ping responses
+  regex: \b\(\d{1,12}\/\d{1,12}\)\b
+  color: f#cab902
+
+- description: Prompt - hostname
+  regex: ^[\w-]+(\(\w+\))?[$#>]
+  color: f#87d700
+
+- description: Interfaces Match-3- good -yellow
+  regex: (?i)\b(interface|IP-Address|triggered|trigger|Trigger|sfpAbsent|Protocol|Interface|Portchannel|sftunneld|protocol|egress|Egress|(SHA[0-9]{0,3})|DPD)\b
+  color: f#ffc400
+
+- description: Interfaces Match-4-good -yellow
+  regex: (?i)\b(interface|ace|interfaces|runLinaCommand|DEPLOYMENT_MODE|Vulnerabilities|oper_state|oper_fec|Tag|PortChannel[0-9]|linkState|Premium)\b
+  color: f#ffd250
+  # color: f.type-11
+
+- description: Interfaces Match-2- good -yellow
+  regex: \b(Device|ID|Local|Intrfce|Holdtme|Holdtime|Capability|ssa|Platform|IP|PLAT|setupTftpBootCommandFile|location)\b
+  color: f.type-10
+
+#### My Customer Change ####
+
+# Cisco ASA/FXOS/FTD Configuration Section
+
+- description: FXOS - good-1
+  regex: \b(ActionQueue|SFTop10Cacher|USM|executed|floating)\b
+  color: f.type-10
+
+- description: Parital/unwanted Match- good -(#ff9830)
+  regex: \b(Stub\-Routing|Process\-tag|Dual\-active|\(R\)|inactive\-if\-config|snmp\-ipv6\-dhcp\-relay|dot1q\-tunnel|route-tag|fddi\-default|H\/W|hsrp\-Vl\d{1,4}\-\d{1,4}|B,T|B,R|notify|A\.B\.C\.D|forwarding\-table|repair\-paths|forwarding\-adjacency|holddown|VERSION|Blacklisting)\b
+  # color: bold f#ff9830
+  color: f.type-5
+
+- description: Parital/unwanted Match- good -yellow
+  regex: \b(passive\-interface|FWD_TO_OWNER|linaConfigStatus|signature|Signature|THRU|thru|sendBladePowerToD|pmtu|output|Output|OUTPUT|passphrase|STDOUT|ELECTION|Authorized|Ours|seclevel|Detected|detected)\b
+  color: bold f#ffd900
+
+- description: ASA Generics log - good
+  regex: (?i)\b(Compatibility|UIB|UFIOB|UFIO|CCL_DIR_UPD_FWDER|CLU_DELETE_SENT|CLU_FWD_RCVD|STALE_FWDER_DELETED|STALE_FWDER_DELETED|interval|coredump|doPowerControlBla|ttl|destination|Destination|Scope|scope|dhcprelay|Native|Appagent|compare|node)\b
+  color: f.status-10
+
+- description: FXOS1
+  regex: (?i)\b(o|ipip|appAgent_reply_processor_thread|Hours|Rcv|HB_RESPONSE|pdts|rsync|Rsync|dhcpd|policy_deployment|policy-bundle|getRunningImage|identification|thread|Sma|DCD|checking|Downloading|Downloaded|Seq|seq|Hosts|dhcpc|sort|Timezone|cap|Status|State|mss|translate_hits|action|rootfs|raid[0-9]|lacp_mode|installApp)\b
+  color: f.status-9
+
+- description: FXOS-keywords-Match
+  regex: (?i)\b(registerResponse|Uptime|FSM_HEARTBEAT|host|Host|Reconnect|reconnect|individual|Individual|secs|reservation|ACK|ack|Ack)\b
+  color: f.status-8
+
+- description: FXOS-1
+  regex: (?i)\b(fover_health_monitoring_thread|Days|Processes|vrf|Subnet|Backplane|backplane|Core_Pruning|Failover|failover|FAILOVER|LDAP|KB|MB|GB|untranslate_hits|top|dr|ESP|clock|[0-9]{0,4}ms|Untranslate|unxlate)\b
+  color: f.type-11
+
+- description: FXOS-2
+  regex: (?i)\b(cluster_hc_timer|Evaluating|analyzing|Malware|Estreamer|dnsproxy|vpn|device_uuid|call-home|SSP|MMAP|tftp|next-hop|Loaded|terminal|Method)\b
+  color: f.type-6
+
+- description: Match Extra - FXOS
+  regex: (?i)\b(vty|logging|Domain|router|IS-IS|summary|flowcontrol|logs|log|flow-control|Registered|Daemon|Linux|mgmtUrl|Passing|LinaShow|Stateful|Initiating|Availability|crond|constructing|Initiate|EventStreamer|client_ip|client|Heapcache|persistent|uri|Phase|interfaceStatusUpdateResponse|appAttributesUpdateResponse|awaiting|loggerd|key|reactivation|auto|upgrading|FlowTable|membership|show|kickstart|CALLHOME|CCL_CLU|Half|KR4|oper_speed|if_index|learning|listening|Triggering|authorized)\b
+  color: f#1fffbc
+
+- description: Cluster keywards
+  regex: (?i)\b(w|FWD|CLU|redirected|CMD|CCP|IGRP|Msglyr|IPv6|VNIC|control|Discovery|intrusion|sqlite|appAgent_start_thread|failToWire|config-action|CD|FileStreamRequest|diskstatus|UUID|processed|MULTICAST|faddr)\b
+  color: f.type-11
+
+- description: Miscellaneous
+  regex: (?i)\b(UIeN|VID|HW|Visibility|Adapters|appInstanceId|appInstanceID|app_InstanceID|ConsumerName|Consumers|new UNIFIED_MANAGER_IP|UM|holdtime|del|rmdir|deployment|Database|Dispatcher|detection_engines|EventQueueHandler|dispatched|Dispatching)\b
+  # color: f.status-3
+  color: f.type-10
+
+- description: FTD-CISCO-FXOS
+  regex: (?i)\b(ConsumerEvent|Consumer|Event|OGS|overlap|MemUsedKB|DiskTotalKB|Samsung|uauth|Uauth|CTM|DIMM|Maximum|in-progress|progress|Progress|ASA_BUNDLE_ONGOING|ASA_BUNDLED|Incoming|Checking|CHILD_R_DONE|ISPI|sa_proto|local|Bundle|filesystem|initState|upgradeReturnCode|NetworkSettings|saA|Msp|Lwe|community-list|octeon|configdispatcher|FileUtil|nodeState|ClientId|cdInitializationStatus|passthrough|LinaCommunicator|CDInitializationStatus|taskId|FXOS|Octeon|Poll|MTU|sma|proto|rcv|Syncd)\b
+  color: f#1fffbc
+
+- description: FTD-CISCO-FXOS-2
+  regex: (?i)\b(a|Y|OutTransforms|Time|TotalEvents|cron|BladeHealth|DiskName|DiskMountPoint|request|Mwe|bootMode|Outgoing|Decrypt|inserting|skeyid|dst|Dst|sa_spi|remote|sa_conn_id|vpn-sessiondb|quotaQuery|re-setting|quotaSet|serverapiBladeOSReboot|externalOperationalStatus|graceful|gracefully|LACPDUs|xfs_repair|fsmStamp|upgradeProgress|ONCALL|ASA_DEBUNDLE_ONGOING|access|ConfigCommunicationManager|slaveNodeId|App-Sync|DeploymentHelper|ngfwManager|OutQueueHandler|signal|Decrypting)\b
+  color: f.type-10
+
+- description: FTD-CISCO-FXOS-3
+  regex: (?i)\b(InTransforms|diagnostic|Diagnostic|xfsQuota|MemTotalKB|DiskUsedKB|CSP|deasserted|De-asserted|Micron|BW|vpnfol|vpnlb|formatDisk|MsgHandler|innerVlan|Looking|unacceptable|sa_trans|mode|QUOTA|Quota|quota|Used|native|Ether-Channel|NewOperState|internalOperationalStatus|HA|ha|fsmStageDescr|attack|RULE|PREFILTER|prefilter|Assigned|Parent|Dir|pause|Requires|Required|clusterName|masterNodeId|DeploymentStatus|deploymentStatus|deloymentMode|CD_MESSAGE_REQUEST|NODE_STATUS|ndclientd|mysql|mysqld|cgroups|cclIp|sql|keyid|ports|Peak|pc|R_SPI|Registration|register|Registering|Stage)\b
+  color: f.status-9
+
+- description: Cisco Platform Setting-1
+  regex: (?i)\b(CSM_CCM|wifi|voip|minus|bulk|Msi|operState|AppAgent|proxy|Proxy|RSPI|sa_dest|EPM|mount_disk_xfs|units|nodeSerialNum|PairName|CcmCommunicatorImpl|cdState|FileStreamer|DownloadManager|CLU_FWD_SENT|attach|ipinip|fxos_ntpd|insert|ssp_pm_stop|Previous|TIME_WAIT|server|CLOCKDRIFT)\b
+  color: f.type-3
+
+- description: Cisco Platform Setting-2
+  regex: (?i)\b(SNMPv3|netsnmp|cspHousekeeping|Load|OldOperState|STANDBY|xfs|checkPoint|remark|Chunk|ha_ctl_nlp_int_tap|policyDbPath|nodeId|Content|coldboot|ctx|inspection|SLAVE_BULK_SYNC|FWD_TO_DIR_N|StandbyAppConfigPrepare|Intrusion|THERMAL_PROBLEM|exception_hand|hash|Hashing|OPENSSL|Permission|Storage|purging|httpsd|dacl)\b
+  # color: bold f#ff9830
+  color: f.type-5
+
+- description: Cisco TCP FLAG for Traffic Inbound/Outbound
+  regex: (?i)\b(UIO|UIOB|Legend|Fwd|miovlan|rsyncd|ftw_monitor|MessageId|HA_STANDBY|FTDEventProcessor|ndmain|CD|Transparent|messagelayer|OOB_ACTION|database|TarUtil|IPC|ipc|OWNED|appInstanceId|SI|InterVRF|GET|requestId|requestID|CSM|Bundled|mc_all|portPairList|SCI_DelL2FwdTableEntry|BYPASS|sip|unlimited|Presence|presence|DeploymentDBRequest|Application|SLAVE_APP_SYNC|detection_engines|hit|PROMISCUOUS|ACCESS-LIST|transparent|downloadImages|alias|Installing|install|Install|Installation)\b
+  color: f.type-10
+
+- description: Cisco NGFW
+  regex: (?i)\b(CDtoLINAInQHandlerTh|CDtoCCMInQHandlerTh|CDStartupTh|ClusterRegistrationRequestHandler|CCMtoCDInQHandlerTh|CDInitialization|CdStartupThread|tbl|eventChannel|deviceSoftwareVersion|CCMExecutor-Th|TunnelClient|FTDEventHndlrTh|EventChannel|groupName|class|TunnelClientES|CCMLinaCommandTh|cdMessagesList|CDMessage|CCMDeploymentTh|FileStreamerTh|inner|Inner|CSDLauncher|required|appsync|populateLdCfgToLnkT|ip-options|left|Left|MASTER|download|extractTarFile|os|Alert|owners|Timestamp|options|put|Jitter|traffic)\b
+  color: f.status-9
+
+- description: NGFW Keywords - good
+  regex: (?i)\b(ssh|pdts_proc|MsgLayerChannel|MQWrapper|InQueueHandler|ShowChecksumParser|ClusterRegistrationRequestHandler|fromLinaChannelName|clusteringMessage|LINA|deploymentTypeFromUM|peers_registered|successfull|fastboot|ign_mac|monitoring|HostCheckUpgradeImageStatus|RequestToInstallLicense|Validating|skipAppsync|operCmd|heartbeatTimestamp|BOOTING_UP)\b
+  color: f.type-9
+
+- description: FTD Keywords
+  regex: (?i)\b(checksum|NodeId|CDInitializationStatusMessage|CDtoLINAOutQHandlerTh|CDExec|RequiredPackageDownloader|rootPath|dbFile|pkg|skip|ftd|mio_nic|bndl_cnt|ADDED|INDIVIDUAL|getPort|perform|Installed|fp_mac|sfpreproc|Inspects|HostCheckUpgradeImageStatus|updateIBMCFw|minorID|EXT-PORT|ifmap|challenges|conflicts|paused|Paused|dirty|portName|dup|Authorization|SQL|policyId|CCL_OWNER_UPD_FWDER|SEC_FLOW_REDIRECT|NORMAL_DEPLOYMENT|NGFWPolicy|Plugin|PlatformSettings|replacement|Overwriting|regex|Unescaped|CGroupsConf|MAXIMUM|PrefilterPolicy|NAP|Replacing|Extracted|pruning|unestablishable|IDENTITY_UNESTABLISHABLE|dimmBlacklistingOperState|initC|reini|detached|Maintenance|cluster)\b
+  color: f.type-5
+
+- description: FXOS Keywords
+  regex: (?i)\b(appagent_sync_server_thread|appAgent_hb_resp_processor_thread|application_agent_interface_commands|pix_flash_config_thread|inlinePairUpdateRequest|inlinePairUpdateResponse|REST|snapshotLocation|snapshot|snapshotTime|executePor|sendSnmpNotificat|phEthPortStateChan|populateExtLink|SC_Send|show_et|SC_chan|show_ip|show_vp|show_fp|populateL2FwdInfo|getVlan|SC_noti|SCI_por|SC_hand|checkSnmReadyForC|ftw|FTW|snm_handle_port_bringup|snm_handle_if_created|snm_update_if_grp_state|snm_handle_port_phy_cleanup|snm_handle_l2_protocol_state_change|Pruned|dme|DME|reliability|Reliability|aInAppName|updateTimestamp|sup|sam_bladeAG|ServiceOrchAG|prevVersion)\b
+  color: f.status-11
+
+- description: Cluster and ASA Keywords
+  regex: (?i)\b(CCP_MSG_QUIT|CLUSTER_QUIT_MEMBER_DROPOUT|DBUG|CLUSTER_QUIT_MEMBER_DROPOUT|CCP|interfaceMappingConfigUpdateRequest|sendVnic|Connecting|miss_fwd|ethpm_change_oper_port_state_and_publish|PORT_FSM_ACTION_INIT|FWM|ELASTIC_FSTREAM|accelerator|HostWaitForUpgradeComplete|RequestToUpgrade|WaitForUserAck|PollDebundlePort|policyName|DebundlePort|UnpackLocal|Description|description|catalogue|Catalogue|States|Call|updateState|DownloadUnpackLocal|installable|packageVersion|appName|externalPortLinkDn)\b
+  color: f.status-9
+
+- description: Bad responses Match- bad -Red
+  regex: (?i)\b(link-flap|removing|out-of-range|LINK_DOWN|FWM_ASSERT_FAILURE|closed|Reset-I|Removing|Removal|broken|Broken|unrecognized|timeouts|failedCb|deleteChild|DownloadDeleteLocal|untriggered|Out-of-Order|uninitialized|SEC_FLOW_SEND_DEL_SUCCEEDED|CFLOW_TIMEOUT_REMOVE|CLU_DELETE_FAIL|CLU_DELETED|CLUSTER_COOKIE_BAD_TIME|contimeout|stopOnError|ResetHAAbortStatus|reload_ids|shutting|reloading|ASSOCIATION_FAILED|asyncFailed|Suspended|loop|Loop|Errno|Reload|reload|errno|CATERR|Non|Reloaded|bug|Expiry|Expire|Powerdown|EXITCODE|range|Security|deadtime|flapping|revocation)\b
+  color: f.status-1
+
+- description: ASA Keywork-1
+  regex: (?i)\b(asa_admin|NIC_REALMAC|direct|processInlinePo|app_sam_servic|app_sam_dme|cgtool|ntpq|UpdateTimeZone|HostPrepareBoot|waitForIBMCFwUpdate|PollActivateOfRemoteFI|UpdateIOM|PollUpdateOfIOM|PollActivateOfMgmtExt|ActivateUCSM|FirmwareDownloaderDownload|VerifyLinkConfig|ApplyConfig|WaitForSwitchConfig|PlatformPack|nic_macFilter_dirty|min|PMLOG|interfaceMapping|bind|firmwareImage|DownloadCopyRemote|firmwareRunnin|SELECT|Routing|heimdall|fwcfg|samdmeFsmComputePhysicalAssociateBiosPostCompletion|getInstalla|fabric|computeBlade|numOfCpus|numOfCores|numOfCoresEnabled|numOfAdaptors|operPower|lsbootLocalStorage|deployState|Try|SmaChannelPool|Level|level|ACL|fragmented|Group|Encryption|encryption|Addresses|Binding|Encr)\b
+  color: f.type-8
+
+- description: Generics - good -timezone
+  regex: (?i)\b(pm|mce_log_st+|SMA|sma|uploadPlatformImage|Core|OFFLOAD|Heap_size|Heap|Rewrite|RebootHostAfterUpgrade|copyRemote|CopyRemote|Activating|Activation|ActivateMgmtExt|waitForSspOsUpdateComplete|Firmware|firmware|unpacking|ConfigureSwitch|SendInterfaces|Initializing|Encapsulation|Acknowledged|Acknowledge|acknowledge|username|Username|Phases|phases|childAction|firmwareUpdatable|userName|policyType|find|APP_NAME|adminStatus|Received|SrcPort|SRC_PORT|PREPARE|INSTALL_COMPLETE)\b
+  color: f#1fffbc
+
+- description: FTD-keywords-1
+  regex: (?i)\b(Opened|opened|cli_xml_server|syslogd|Checkheaps|Inspects|Built|Initialising|HEAP-CACHE|Flows|Resolve|CheckReadiness|SendStatus|triggered|installed|snortVersionFileData|exported-files|updating|Updating|FLOW-LOOKUP|flow-lookup|Booting|cleared|spanned|INFO|info|joining|ENCR)\b
+  color: f.status-8
+
+- description: ASA/FXOS Keyword - Best Green
+  regex: (?i)\b(requests|bytes|Bytes|Byte|bits|byte|bit|SWITCH|Transaction|RAMDISK|Informational|clock|Clock|FTWMonitorTask|PROVISIONLD|OCTEON|established|Reserving|ramdisk|mirroring|getSer|partial|transport|Cleanup|unlocked|getDeploymentStatus|DeviceMode|identifier|Identifier|Copy|copy|Clear|keepalive|CLU_BACKUP_CREATED|rollback|Rollback|linaNodeState|adi|whitelist|unchanged|added|Balanced|creating|AVAILABLE|validating|VALIDATING|General|CTS|Transport|Evaluation|pps|verified)\b
+  color: f.type-9
+
+- description: Cluster Keywork-1
+  regex: (?i)\b(CCL_OWNER_ELECTED|CLU_UPDATE_SENT|CLU_ADD_SENT|CLU_FWD_CREATED|CLU_FWD_UPDATED|append|Pull|speedup|extractTarFile|db|path|OnBoxValidators|Firepower-module1|Deploying|dependency|LUA|Framework|AccessControl|Reservation|Allocating|PORTSCAN|dest_file|validateExportedFiles|NUMA|gre|Gre|Renewal|MDT|firmwareRunning|computePnuOSImage|fsmFlags|sam_serviceOrchAG|rommonVersion|ssposMode|imagePath|app_sam_servi|tftp_open|semi-distributed|CAPTURE|Capturing|capture|MainThread|prune_cores|DF|DeploymentContext|deploymentType|per|Centralized|RESULT|results|result|commandProgressUpdateRequest|Validate)\b
+  color: f.type-8
+
+- description: ASA/FXOS Keywords-2 - Best Green
+  regex: (?i)\b(updates|UPDATE|Updating|Update|syslog_utils|REGISTERED|internals|fsmProgr|upgradeState|samdmeFsmOsControllerInitOSRequestToUpgrade|preserve|Internal|hwclock|connectivity|login|Login|calling|Calling|Sleeping|sleeping|cipher|CISCO|Sync|contiguous|Session|gaddr|src_if)\b
+  color: f.type-9
+
+- description: Cisco Keywords - match 4 digit Num(^\d{4})-(#ff9830)
+  regex: (?i)\b(SSE|ADJACENCY-LOOKUP|geo|DLY|Unlimited|Trying|Eval|Entitlement|mapped|Licensing|License|license|SUP|Moving|Move|moved|max|Package|Bootflash|^\d{4})\b
+  # color: bold f#ff9830
+  color: f.type-5
+
+- description: response time
+  regex: (?i)\b(SGT|sgt|msec|ms|SNMPD|Hour|mins|seconds|second|add|Add|Unified|unified|Association|unarchive|APP_SHORT_NAME|Upgrade|upgrade|upgrades|upgraded|Nexthop|nexthop|BOOTP|Ciphersuite|cipher|NO_APP_INSTANCE)\b
+  color: f.type-3
+
+- description: Generics - good -green
+  regex: (?i)\b(P|freed_by|Packets|packets|packet|(M|m)ount_(M|m)edia|accepts|tacacs|radius|Speed|speed|BEGIN|reserved|Reserved|ready|Ready|DNS|dns|SYNC_PROC|monitorlist|HTTP|HTTPS|UCS|instance|capability|Mate|ipproxy|Channel|flag|Reading|StandbyDeployFlowHandler|owner|Owner|owners|Owner|sensor|sf_heartbeat|SYNC|CurState|hits|bootCLI|PORTCHANNEL_ID)\b
+  color: f.status-9
+
+- description: Generics - good -purple
+  regex: (?i)\b(DB|sport|read|alloced_by|Mbytes|mounted|Mounting|fover|Logger|logger|AAA|aaa|fwm|blade|Blade|Threshold|mcp|MCP|BUCKET|Frames|portmgr|SAM-Coupler|Chan|sftunnel_status|ssp_ntpd_s+|sf_channel|sf_peers|ldap)\b
+  color: f.type-11
+
+- description: Generics - good -purple
+  regex: (?i)\b(Deploy|deploy|container|xfs_quota|Blk_cnt|alloccnt|CORE|IPMI|TAM|tam|ICAP|Snmp|snmp|SNMP|description|Adapter|Discovered|Mem|MEM|untranslate|VCAP|Watchdog|Sign|CA|Validity|ETHPM|cmd|udld|lldp|unassigned|ike-common|ETHPC|sam_dme|ASIC|DYNAMIC|ipmi|translation|LinaShowCommand|port-channels)\b
+  color: f.type-11
+
+- description: Generics - good -blue
+  regex: (?i)\b(VDC|refcnt|Offload|offload|HIGH|TCAM|bcm_usd|EtherType|ethertype|MST|veth|Veth|Vethernet|Affected|Startup|Associated|TIME|PR|used|translate|ipmc|PC|clacp|comm_alarm|STALE|Synchronize|MIO|cgroup|Certificate|Executing|execute|elements|time|times|Rcv|PKI|pki|sam_coupler|RespSPI|SLAVE_COLD|sf_ssl)\b
+  color: f.status-11
+
+- description: Generics - good -Yellow
+  regex: (?i)\b(hb_timer|rpf-check|trunk|Attention|Bulk|blk_location|rate|authentication|preshared key|Vethernet|Remote|transmitted|Activate|access-list|initialization|SFDataCorrelator|SFDataCorrelato|SFDataCorrel|timezone|Address|Socket|Hostname|Initialization|INSERTION|PM_UTILS)\b
+  color: f.type-10
+
+- description: Generics - good -pink
+  regex: (?i)\b(UTC|GMT|IST|ACDT|EDT|AST|AEST|PST|CET|CST|IST|EST|CEST|JST|KST|UCT|route|HardDisks|ASLR|IKEV1|IKEV2|auth|Auth|AUTH|Creation|ftp|ssl|BFD|FTD|ASA|sia|Motherboard|rommon|Chassis|CPUs|Architecture|RAID|Vendor|Disk|disk|CIMC|Disconnect|disconnect|fsm|Minor|Disks|minor|requestor|msgId|discovery|Octets|FTP|Bios)\b
+  color: f.type-11
+
+- description: Generics - good -Green
+  regex: (?i)\b(Health|SA|payload|sa|syslog-ng|LINK|PKT|stub|Stub|Processed|connect)\b
+  color: f.type-9
+
+- description: VPN - good -Green
+  regex: (?i)\b(passed|RUNNING|Skip|INFORMATIONAL|REQUEST|IKEv2|Proposal|responses|Response|connection|Connections|Start|health|starting|Restarting|recieved|inside|Statistics|Encrypted|AES128)\b
+  color: f.status-8
+
+- description: Generics - good -cyan
+  regex: (?i)\b(SPI|Receiver|Shrink|REQ-REPLY|ND|RE-USING|LicenseMgr|DispatcherTask|AG_licenseAcquireReqCb|R-U-THERE-ACK|DstZone|PktTracerDbg|Inline|Inline-set|inlinePair|inline-set|proposal|proposals|Date|Dispatch|dispatch|operationalState|bladeModel|bladeSerial|OS|sourceIP|DEPLOYMENT_DB_REQUEST|SLAVE_CONFIG|forward|Forward|Forwards|msgid|startApp|Pkts|index|hitcnt|Rated|Rate|STATUS|offloaded|Offload|Offloaded|owned|instances|Unicorn)\b
+  color: f.status-9
+
+- description: Generics - good -Green
+  regex: (?i)\b(Enabling|Running|running|CLI|cli|LinaFsmState|USED|CSCvs|access|http|https|fover|sftunnel|sftunneld|PASSED|requested|Passed|start|registerRequest|Request|HA_STATE_ACTIVE|Complete|joined|join|lina|Lina|WHITELIST|Whitelist|reading)\b
+  color: f.status-8
+
+- description: Generics - good -Yellow
+  regex: (?i)\b(Exchange type|authorization|accounting|SM Trace|NIC_STATUS|APPAGENT|Deployment|HA_STATE_STANDBY|tcb|remaining|CGroups|promiscuous|LED|led|Platform|Copying|SIP|DAQ|correctable|cmc|ECC|cimc|HDD|DDR[09]|TMP|SFDataCorrelator|rebooter|SLAVE|Daq|lacp|hostPack|OCSP|CRL|VPNFIP)\b
+  color: bold f#ffd236
+
+- description: Generics - good -Parrot Green
+  regex: (?i)\b(ssp_vnic|ON|Finished|Loop|clusterState|Succeeded|Synchronized|Delivery|Summary|Mappings|Sandbox|Connected|send|registered|Lookup|counts|sensors|isis|IS-IS|Qos|static|syslog|DP-CP|dp-cp|snmpd|linestate|ntpd|receiver)\b
+  color: f.type-9
+
+- description: Generics - good -Pink
+  regex: (?i)\b(sshd|bcm|BCM|sma_slot1|Searching|CLUSTER_STATE_MASTER|OBFL|obfl|BMC|bmc|CMC|FPGA|fpga|Telnet|telnet|Affinity|num|UserGroup|Datastore|replicated|periodic|IERR|MCERR|Inspected|SANDBOX|NGFWDbg|IDS|subnets|Equipped|ASA_LINA|RPC|portBundleOperState|fsmDescr|ids|POOLIP)\b
+  # color: f.type-3
+  color: f.type-11
+
+- description: Generics - good -(#ff9830)
+  regex: (?i)\b(re-register|appAG|Midpath|bladeAG|docAG|portAG|statsAG|appAgent|mcAG|Mc|password|speed|temp|Dynamic|dmz|DMZ|Version|Initialized|ethpm|Drain|DETECTED|Destroy|destroy|stale|Flushing|NOERROR|DMAC|false|recycle)\b
+  # color: bold f#ff9830
+  color: f.type-5
+
+- description: Generics - good -Parrot Green
+  regex: (?i)\b(get|Discovered|Discover|Associate|mount|Associated|on|ethpm|count|Profile|registerResponse|successes|sfipproxy|sfmbservice|ASAConfig)\b
+  color: f.type-7
+
+- description: Generics - good -Green
+  regex: (?i)\b(loading|Peer|Peers|input|finished|Negotiation|negotiation|tomcat|SSEConnector|chunks|chunk|stats|Verifying|permitted|NOTIFY|proposes|useragent)\b
+  color: bold f#c7ff6b
+
+- description: Generics - good -cyan
+  regex: (?i)\b(PDTS|load-balance|ICMP|Uptime|SSD|snort[09]|Reputation|process|Responder|responder|Processor|line)\b
+  color: f.type-6
+
+- description: Generics - good -purple
+  regex: (?i)\b(snmp|Vendor|icmp|sunrc|IDFW|scp|ntp|ptp|Processes|TERM|sfmgr|iSNORT|conn_fd|DiskMgr|DEPRECATION|FQDN|access-group|Local|directly|transform|Threat-Detection|Preprocessor)\b
+  color: f.type-11
+
+- description: Generics - good -pink(#ffd6ff)(#df99f0)
+  regex: (?i)\b(P0|SCTP|sctp|xlate|table|Location|Table|RESPONDER|accelerators|days|availability|STIME|licensed|id|trace|Evaluate|CheckBladeReadiness|conn|ccm|AES256|swap|Swapping)\b
+  color: bold f#ffbfff
+
+- description: Generics - good -cyan
+  regex: (?i)\b(Role|Parent|Control|dir|Bypassed|bypass|operable|HitCount|object|Object|rule-id|DATAPATH|Firepower-module|dynamic|Writing|events|Pluginsdata|free|Free|association|availableMemory|chassisId|dhcp|DHCP|addr|processing|Processing|Clustering|iftype|send_recv|Replicates|Replicate)\b
+  color: bold f#1fffbc
+
+- description: VPN - good -pink
+  regex: (?i)\b(mypubkey|L2L|L2TP|IKE|ikev1|ikev2|xlates|Xlate|DTLS|tls|TLS|SSL|isakmp|IKEv1|IKEv2|certificate|lifetime|I_PROC_INIT|MsgID|EvaluateAssociation|forceDeploy)\b
+  # color: bold f#9ce3ff
+  color: bold f#9efbff
+
+- description: VPN - good -yellow
+  regex: (?i)\b(decaps|Dcrypt|decrypted|decrypt|decompressed|txload|TX|Tx|digest|decapsulated|Unlocking|Unlock|Hours|SF-IMS|output_ifc|ifc_out|dest|reason|DST_PORT|reassembly)\b
+  color: bold f#ffd900
+
+- description: Generics - good -Parrot Green
+  regex: (?i)\b(sequence|encaps|Encrypt|CCL|compressed|verify|bootup|Tunnels|bits|bit|Conns|Diskmanager|CONN-SETTINGS|initiator|Notification|netstat|image|images|appAttributesUpdateRequest|tracking)\b
+  color: bold f#d8fc44
+
+- description: Generics - good -(#ff9830)
+  regex: (?i)\b(FSM|detect|Redirect|techsupport|Link|Inventory|shared|SATA|Map|map|CP|DP|Inspection|INSPECT|reverse|inspect|Inspect|REPLACE|Replace|adjacency|headers|total|laddr|encountered|Backup|NetworkObject|reply)\b
+  color: bold f#ff9830
+  # color: f.type-5
+
+- description: Generics - good -orange
+  regex: (?i)\b(switch|Context|ACLMGR|Controller|Current|controller|Severity|severity|Genuine|App-instance|Uplink|uplink|Uptime|UPTIME|flow-offload|Secondary|secondary|crossed|Standby|slave|Slave|Giants|Model|mac_dest|egress|bcast|validation|TxQ|forwarded|forwarder|SSPOS|rtc_cmos)\b
+  color: bold f#ffc400
+
+- description: Generics - good -pink2
+  regex: (?i)\b(Crypto|crypto-map|engine|spi|Child|DES|3DES|AES|CBC|SHA|child|CHILD|IPSEC|VPN|DH|VBD|disk0|CRYPTO|contexts|most|mc_mode|DOCTOR|doctor|DH|msg_id|atomic\-aggregate|fwd|dscp|CQ_FLOW|lldpd|sec|snort|snort3|Hardware|SFPDETECT|sysclock|system_clock|file|fqdnId|SF-IMS|task_id|switchname|InitOSRequestToUpgrade|N[12]|sqlne|sqlnet|adding|CMOS|prot)\b
+  color: bold f#ffbfff
+
+- description: Generics - good -Green
+  regex: (?i)\b(operation|on|ignore|SUCCESS|success|Activate|activate|Enable|enable|enabling|Enabling|enabled|Enabled|rxload|unicast|Online|success|Success|RPC_SUCCESS|ROUTE-LOOKUP|CQ_FLOW_OWNER_REQUEST|CREATION|Permitted|SYN|Container|Alerting)\b
+  color: bold f#c7ff6b
+
+- description: Generics - good -Green-2
+  regex: (?i)\b(Instance|in|Complete|On|seconds|Seconds|Second|USER|Internal|HeartBeat|Heartbeat|HB|HEARTBEAT|Available|heartbeat|True|TRUE|true|Tunnel|ingress|tunnel|Inbound|MACs|CCL_OWNER_RCVD|FWD_TO_MASTER|CLU_KA_SENT|isclear)\b
+  color: f.type-9
+
+- description: Possible warning and other things that deserve attention Match- good -yellow
+  regex: \b(aggregate(d|\/\w*)|atomic\-aggregate|\[V\]|2WAY|EXSTART|EXCHANGE|LOADING|\(global\)|tag|key-chain|backup\/repair|repair|v2\/D|v2\/SD|warning|LASTHOG)\b
+  color: f.type-10
+
+- description: Possible warning and other things that deserve attention Match- good -yellow
+  regex: \b(DAQ[0-9]|Condition\-map|Advertise\-map|no\-advertise|no\-export|local\-AS|internet|reached\(\d*\)|n-802.1q|inactive|config(.*)?\)|notconnec(t)?|notifications|mezz|Monitor|psh|PSH|Module|Modules|module|condition|WCHAN|connector|Global|global|Pro|isGroup|Scanning|rate_limit)\b
+  color: bold f#ffd900
+
+- description: Good responses Match- good -Green
+  regex: \b(rstp|best|CIST|QM_IDLE|(IP|L|CDP)CP\+|CHAP\+|PAP\+|(IP|L|CDP)CP\[Open\]|UP\-ACTIVE|permit|(G|g)ood|uptime|0x2102|0x102|0xF|Established|ESTAB|enable(d)?|READY|AUTHORIZED|ESTABLISHED|SUCCESS(FUL)?|CONNECT(ION|ED)?)\b
+  color: f.type-9
+
+- description: Good responses Match- good -Green
+  regex: \b(?:\*\>|FWD|802\.1q|dot1q|LocalT|yes|\(SU\)|\(RU\)|\(bndl\)|\(P\)|synchronized|ACTIVE|rapid\-pvst|FULL|.*\.(?:bin|img|pkg|packages\.conf|vm)|.*\-mz\..*)\b
+  color: f.type-7
+
+- description: Good responses
+  regex: \b(S|idle|our_master|UP\-ACTIVE|\*\>|root|Root|802\.1q|LocalT|yes|forwarding|synchronized|active|rapid\-pvst|up|Up|UP|Async|RESPONSE|Active|CREATE_CHILD_SA|Receive|PASS|SEC_FLOW_RCVD_UPDATE|CLUSTER_COOKIE_SENT|INITIAL_RVCD|DIR_RCVD)\b
+  color: f.status-8
+
+# End of Cisco ASA/FXOS/FTD Configuration Section
+
+# Critical/BAD Error Log Trigger
+
+- description: Critical and Error Messages Match- Bad -Red
+  regex: (?i)\b(Wait|wait|waiting|malformed|kill_process|drop|disabled|oom_kill_process|ENQ|FAIL|failed|Failed|Error|Fatal|fatal|Malformed|Violation|violation|violate|Violate|Major|FAIL|Waiting|Removing|out|Disabled|disable|disabled|Responding|suspended|suspend|exiting|lastAdaptorCrashReset|lastBiosHangReset|lastCatErrReset|OUT|outdated|Any|reinitialized|reinitializing)\b
+  color: f.status-1
+
+- description: Critical and Error Messages Match- Bad -Red-1
+  regex: (?i)\b(Blocks|blocks|timeout|warnings|offline|adminState|Removed|remove|removed|Missing|missing|Unknown|Unavailable|Latency|latency|No|NO|Identify|identify|fault|Fault|RESET|reset|TIMEOUT|RETRY|retry|Reset|disable|break|lina_cluster_hold_timeout|majorID|unresolvable|SEC_FLOW_RCVD_DEL|deassert|DeassertResetBypass|Thresh)\b
+  color: f.status-1
+
+- description: Critical and Error Messages Match- Bad -Red-2
+  regex: (?i)\b(stop|Stop|STOP|conflict|MAJOR|Major|critical|CRITICAL|Deny|deny|DENY|Admin|DEBUG|SHUTDOWN|shutdown|BAD|FAILED|INVALID|Invalid|invalid|Timeout|Outbound|Crash|flooding|FAILURE|Closing|Unrecoverable|Expires)\b
+  color: f.status-1
+
+- description: Critical and Error Messages Match- Bad -Red-3
+  regex: (?i)\b(Errors|DESTROYING|Warnings|Failures|Critical|WARN|Warn|Blocked|identity|blacklist|blacklisted|Failure|Warning|shut|Stopping|Timeout|rebooting|boot|Deletion|Not|not|restart|Restart|WAIT|EMPTY|empty|drop|deleting|read-only|Unregistered|Forbidden|FAILED_CNT)\b
+  color: f.status-1
+
+- description: Critical and Error Messages Match- Bad -Red-4
+  regex: (?i)\b(CPU[0-9]|cpu|CPUs|deleted|resets|reset|memory|punt|debug|Punt|memory|RETIRED|cores|Cores|locking|underruns|overrun|underrun|hogs|Power|discard|outside|outbound|off|flapped|flap|broadcast|duplex|Failed|ERROR|error|unavailable|power|IOM|Administratively|REBOOT|fatal|FATAL|DIMM_Fault|abort|decryption|aborted)\b
+  color: f.status-1
+
+- description: Match high CPU
+  regex: \d{1,5} [a-z]+.*[MKG].*100.00% (?!idle).*
+  color: f.status-1
+
+- description: Match high CPU
+  regex: \d{1,5} [a-z]+.*[MKG].*(6|7|8|9)\d\.\d\d\% (?!idle).*
+  color: bold f#fd971f
+
+- description: Match high CPU
+  regex: \d{1,5} [a-z]+.*[MKG].*(1|2|3|4|5)\d\.\d\d\% (?!idle).*
+  color: bold f#f3c844
+
+- description: Generics - bad -Red
+  regex: (?i)\b(management|overruns|underruns|initialized|temporarily|dup_cnt|MEMPOOL|MEMPOOL_DMA|duplicate|Unmounting|Shutdown|rejects|Fails|Rejects|^init|linkdown|OFF|crashed|MAX|power|ALARMS|zombie|load|Stopped|NONE|NULL|cleanup|Deleting|doesn't|Embryonic|Conflict|vp|MAXHOG|unbundle|UNBUNDLE|RST|REMOVING|initSession|handleError|INIT|WATER)\b
+  color: f.status-1
+
+- description: Generics - Bad -Red
+  regex: (?i)\b(panic|Rebooting|Abort|secret|INIT|Duplicate|aborted|stopApp|WARNING|High|Mgmt|svi_shutdown|FSM_INIT|err_cnt|de-register|Block|initialising|Jumbo|rollbackCli|Unexpected|STANDBY_INIT_STATE|(C|c)onfig(D|d)ispatcher|killed|Killing|PowerCycle|powercycle|reload|Expire|inconsistent|LIMIT|Limit|out-of-band|end|pre-boot|PowerOn|mgmt|Restarted|MGMT|Gateway|Preboot|cleaning|EXTEND|extend|Thermal|mgmt[09]|Hang|Max|Decrypted|embryonic|untrusted)\b
+  color: f.status-1
+
+- description: Generics - Bad -Red
+  regex: (?i)\b(reboot|killAll|oom-killer|dump|POWER|_UserGroupMapReload|Deprecated|CATERR_N|caterr|ROMMON|rommon|tmatch compile|OUTSIDE|Exceeded|TMATCH|Treat|Detection|ERROR|errdisable|admin_state|Asserted|asserted|retransmissions|retransmission|errorMsg|assert|Assert|BLACKLIST|Blacklist|DROP)\b
+  color: f.status-1
+
+- description: Generics - Bad -Red
+  regex: (?i)\b(_FAIL|_STATE|_SPEED$|_STATUS|_PRESENT|_SHUTDOWN|_WARNINGIN|_WARNINGOUT|_WARNINGENV|Cannot|DIMM_Fault|_Fault|Unverified|unexpectedly|Top|Storm|Watchdog|NOT_RESPONDING|unmounted|fsmRmtInvErrCode|fsmRmtInvErrDescr|fsmRmtInvRslt|hang_notify)\b
+  color: f.status-1
+
+- description: Generics - good -Green
+  regex: (?i)\b(NA|Out|Boot|MEMPOOL_DMA|MEMPOOL_GLOBAL|fragments|fragment|Fragmentation|Debundle|KILL|Kill|management[09]|exhausted|exhaust|Faults|critical|FIN|FINs|Gw)\b
+  color: f.status-1
+
+- description: Generics - Bad -Red
+  regex: (?i)\b(Hog|Absent|Password|unknown|FAILED|DMA|FAILED|force|Forced|Failures|ALLOC|DESTROY|Flush|disruptive|PURGE|Missed|Outside|Discarded|REKEY|IDENTITY|rekey|SSLERR|BAD|NOT|rpf-violated|Never|never|Threat|crashinfo|Crash|administratively|down|broadcasts|Broadcast|unsupported|Unsupported|Insufficient|UnResponsive|fin)\b
+  color: f.status-1
+
+- description: Possible warning and other things that deserve attention Match- Bad -Red
+  regex: \b(((E|e)rr(ors|or)?)|reset|act/unsup|(m|m)ismatch|BlackListing|UNINSTALL|uninstall|drop(s|ped|ping)?|runts|CRC|collision(s)?|LRN|LIS|unsynchronized|Unsynchronized|SYN(SENT|RCVD)|PORT_FAILED)\b
+  color: f.status-1
+
+- description: Possible warning and other things that deserve attention Match- Bad -Red
+  regex: \b(Peer\(STP\)|Shr|pvst|ieee|deleteU|mstp|Bound\(PVST\)|INIT|Mbgp|LAPB|l2ckt\(\d{1,10}\)|disable(d)?|unnumbered|Mismatched|mismatched|prefailure|disconnecting)\b
+  color: f.status-1
+
+- description: Bad responses Match- bad -Red
+  regex: \b((F|f)ail(ed|ure)?|not(.*)?|bad|never|BLK|fddi|n\-isl|isl|blocking|\(tdp\)|tdp|TDP|(I|i)nvalid|err\-disable(d)?|unusable|a\-half|half|a\-10|\(SD\)|\(D\))\b
+  color: f.status-1
+
+- description: Bad responses Match- Bad -Red
+  regex: (?i)\b(Z|trashing|octeon_init|disconnect|unbundled|denied|LacpDetach|DENIED|lock|deny|infinity|CORRUPTION|interrupts|interrupt|Inactivity|INCONSISTENCY|deleteList|inaccessible|\*ROOT_Inc|BKN\*|\*LOOP_Inc|wrong|K[2456]=1|cannot|MM_NO_STATE|MM_KEY_EXCH|UP\-NO\-IKE|Idle|ERROR:)\b
+  color: f.status-1
+
+- description: Bad - emergancies, alerts, and critical log messages Match- bad -Red
+  regex: \b%\w*\-[012]\-\w*\b
+  color: f.status-1
+
+- description: Bad responses
+  regex: \b(F|unsynced|CLU_DEL_DUP_OWNER|admin|administratively|down|Down|terminated|terminate|DOWN|fail|failed|not|not active|not activated|bad|never|BLK|fddi|n\-isl|isl|notconnect|EOF|blocking|\(tdp\)|tdp|TDP|denied|invalid|err\-disabled|disabled|unusable|DENIED|err\-disable|infinity|inaccessible|wrong|cannot|MM_NO_STATE|MM_KEY_EXCH|UP\-NO\-IKE|K[13]=(\d{2,3}|[02-9])|K[245]=(\d{2,3}|[1-9]))\b
+  color: f.status-1
+
+# End of Critical/BAD Error log Config
+
+# - description: Match Port Number-4 - Best one
+#   regex: ((?::))(?:[0-9]+)$
+#   color: bold f#ffd270
+
+- description: Match ASA/FTD Keywords
+  regex: (?i)\b(Length|len|Ownership|ownership|portmanager|vpifnum|faddr|Query|ECMP|ecmp|balancing|win|apache2|CN|AS|udp|SEC_FLOW_OWNER_MISMATCH|SEC_FLOW_TO_PINHOLE_OWNER|HostPwrInit|SYN_SENT|Adjusting|ENERGY_PERF_BIAS|Working|flow|is_slave|clstr|l3_type|auth_status)\b
+  # color: bold f#aef9fc
+  color: bold f#9efbff
+
+- description: Match IPSec VPN negotiation States
+  regex: (?i)\b(s|ip|UIOoN1|I_WAIT_INIT|INIT_DONE|I_WAIT_AUTH|AUTH_DONE|INFO_I_WAIT|EV_CHK_PENDING|EV_OK_ENCRYPT_RESP|INFO_R|created|INPUT|written|Keepalive|sackOK|becoming|snp|reference|ref|Resolving|existing|Transfer|create|redirecting|Metric|CLU_KA_RCVD|CLU_UPDATE_RCVD|Operating|UOeN1|initialize|interfaceStatusUpdateRequest|activated|PerfMonitor)\b
+  color: bold f#d8fc44
+
+- description: Match IPSec VPN negotiation States
+  regex: (?i)\b(UIOeN1|I_BLD_AUTH|I_PROC_AUTH|INFO_I_BLD_INFO|EV_FREE_NEG|I_BLD_INIT|Close|unit|goid|CLU_DELETE_RCVD|CLU_BACKUP_UPDATE_FAIL|CLU_FWD_UPDATE_FAIL|SEC_FLOW_OWNER_MISMATCH|CLU_DEL_DUP_OWNER|SEC_FLOW_UPDATE_FAILED|DeleteCurlDownloadedImages|softreset|domain|NPU|sendSnmpN|ccl_ha_nlp_int_tap|appAGIPPort|implicit|privacy|SSL_NP|Reinit)\b
+  # color: bold f#ff337d #ff4085
+  color: f.status-10
+
+- description: Match various FXOS/FTD/ASA
+  regex: (?i)\b(NAT-T|console|ip_version|sagChannel|acl|Site|log_id|GR|Datagrams|cluster_action|counter|CLU_BACKUP_UPDATED|CLU_KA_NOSTUB|HostOSIdent|xlated|errName|Accepting|nameif|stacksize|REFER)\b
+  # color: bold f#9ce3ff
+  color: f.type-14
+
+- description: Match Day of Week (like Mon, Tue)
+  regex: \b(Mo(n(day)?)?|Tu(e(sday)?)?|We(d(nesday)?)?|Th(u(rsday)?)?|Fr(i(day)?)?|Sa(t(urday)?)?|Su(n(day)?)?)\b
+  color: f.type-11
+
+- description: FTD/Snort Match Rules
+  regex: (?i)\b(Verdict|Policies|Rule|Rules|rule_id|Detection|CLU_DELETE_STALE_STUB_SENT|status[09]|mac_present|MACaddr|inner_vlan|HostOSPolicy|sfifd|clsf|policy)\b
+  color: f.status-9
+
+- description: ASA Keywords match(#8670ff)(#7a63ff) (#9785ff)
+  regex: (?i)\b(ACPI|masks|mask|netmask|CLOSE_WAIT|default|decode|misc|NP|PASV|ifc_in|input_ifc|network|set|ASP|asp|PDTS_SNORT|buffer|SLAVE_FILESYS|aOutFeatName|agent|hagHostOSConnect|Provisioning|ofld_init|most|ifc|marvell|product|nlp_int_tap|installAppRequest|appAGHeartbeatIPPort|thread|threads|appid|getCachedImage|code|ALLOC)\b
+  # color: bold f#8670ff
+  color: f#8e7aff
+
+- description: fxos/FPR Keywords match (#8670ff)(#7a63ff)(#9785ff)
+  regex: (?i)\b(Mrd|GetFxosPlatformTypeID|Command|Supporting|sda|EXT3|NFSD|NFSv4|CoreFileMgr|FPRM|driver|mroute|LU|restricting|UID|internalPort|EXT4|duration|Allocated|allocation|QAT|ttl|LAN|match|matching|Attempting|frequency|standalone|TXQLEN|MODEL|webvpn|allocates|allocate)\b
+  # color: bold f#8670ff
+  color: f#8e7aff
+
+- description: ASA Keywords match-3
+  regex: (?i)\b(NS|Binsize|sigcrash|counters|SEC_FLOW_RCVD_ADD|CCL_DIR_ELECT_OWNER|perfmon|ResetState|psu|sam_appAG|setBundleVersion|setPower|isApplicationSupported|updateEpmFpgaMos|polling|firmwareChange|computeFulf|Serverapi|restoring|sendPower|getBiosPr|processors|miovif_appag_api|vif|promisc|vic|ivlan|application_agent|dpts|twice|MIOVIF|ipmi_si|refUuids|ActionQueueScrape|instanceId|cgroup_monitor|vrt|point|fsmStatus|Multiple|Grp|loglevel)\b
+  # color: bold f#bff5ff #9feefc
+  color: bold f#91e4f2
+
+- description: FXOS Keywords (#0dbaff)
+  regex: (?i)\b(psu|vntag|sam_appAG|execut|app_sam_licens|sendCpuOp|prepareDm|vbi_mac|miomod_svi|externalPortResponse|externalPortResponse|BootHost|decreasing|lif|paloerrd|vifindex|ovlan|populate|sif|populateL|l2cfg|vpgrp|transferred|sleep|MemoryKB|arp|ARP|ARPA|returned|pref|uroute|Metadata|smartctl|HIP|SMP|clocksource|tap[0-9]|nfs|DN|oldAdminSpeed|section|Stack|ccl_ha_tap_nlp|SrcZone|Intelligence|Livcore|type|SMTP|nlp|policy_apply|sfcli|CloudAgent|stunnel|director|policer|SRU|audit|last)\b
+  color: bold f#0dbaff
+
+- description: FXOS_keywords - good -Yellow (#fd971f)
+  regex: (?i)\b(UxIOeN1|UxOeN1|peerDn|allowSharing|fsmTry|mcmode|linkStatus|appInstId|chassisSerial|NicConfigHostOSPeer|updated|ignoring|all_mcast|sreset_type|CLUSTER_SLAVE_INIT_STATE|re-assign|TIME_ERROR|NO_REBOOT|rev|acquired|acquire|Protect|usable|bridge|Unobfuscated|rw|LISTEN|EXT API|Value|average|MIPS|Bootloader|flash|FPU|automount|Runtime|frame|Mandatory|subject|external|eval|outer_vlan|threatlevel|NetFlow|Sinkhole|Confidence|Logical|reboot_monitor|Features|CCL_CONTROL|Hello)\b
+  # color: bold f#ff9830
+  color: f.type-5
+
+- description: FXOS/AppAG_keywords - good -Yellow
+  regex: (?i)\b(application_agent_mio_interface|application_agent_msgHandler|fover_FSM_thread|PrepareForBoot|sspUpdateHostPreBoot|HostPrepareKeyFile|xvlan|L2FwdInfoInv|vpgrp|sam_portAG|ecmp_id|diffL2Fwd|CLUSTER_EVENT_MEMBER_STATE|cache|AG_platformI|wscale|app_id|dynamically|CSeq|Optimizing|OptimizeTables|sfims)\b
+  # color: bold f#9ce3ff
+  color: f.type-13
+
+- description: AppAG Keyword Match (#d8fc44)
+  regex: (?i)\b(sudo|failToWireUpdateRequest|externalPortRequest|externalPortRequest|commandStatusUpdate|heartbeatResponse|operations|SetPeer|oper_port_state|lina_monitor|ConnectionEvent|Freeing|ether|status[1-5]|hwidb|Clearing|AG_register|Released|Virtual|1Min|replication|Attribute|Attributes|flags|Flags|inserted|Completed|answer|rule_match|message|Messages|Toshiba|io|trust|ids_alert|file_alerts|Newsession|EventHandler|kernel|SystemBootup|SHOW_XML_REQUEST|authenticated)\b
+  color: f#d8fc44
+
+- description: ASA Keywords match-2
+  regex: (?i)\b(pool|pools|serviceOrchAG|prune|captured|HWaddr|CCL_NLP|port|count|CLU_KA_UPDATED|CLU_ADD_RCVD|invoked|invoking|invoke|isGroupC|MC_MAC|sender|Upload|DeassertResetBypass|hagPnuOSDisconnect|async|sam_nicAG|port-manager|Primary|MAC|Operability|number|5Min|Slot|ENQUEUED|sAMAccountName|OU|tracer|inter|perf|Entry|stratum|cluster_detach|TAP_NLP|DeploymentHelper|BIOS)\b
+  color: bold f#00f2ff
+
+- description: AppAG Keyword Match (#ff337d)(#ff4d8d)
+  regex: (?i)\b(D|CPU[0-9]{2}|rloginUser|RM|UDP-Lite|Vulnerable|Queued|Switched|governor|PCI|boot_image|RCU|mce|Micron|ATA|failToWireUpdateResponse|Nodes|Attempt|attempts|SMAServerIP|managers|pat|PAT|NAT|Fan|Hotfixes|net|Pinhole|Pinholes|order|pmtool|AppID|app|Apps|fqdn|region|file_blacklist|keyring|low|hap|unit_id|manager|endPoint|SWBUILD|LINA_IN_OCTEON|onbox|requires_process|allocd_by|Parse|Contact|hsts|exclude|IfClass|port_info|num_allowed_vlan|admin_speed|phy|tail|detach|TTI|SCB|Post|Cavium|Held|worst|unblock)\b
+  # color: f#ff337d #ff4085
+  color: f.status-10
+
+- description: ASA/FXOS/FTD Keywords match-2
+  regex: (?i)\b(Allow|Pass|inside|service|write|Availability|Oper|heartbeats|src|sending|Rx|rcvd|monitor|new|svc|handshake|establish|intra|pending|httpBypass|file_whitelist|FlowStats|sent|LISTENING|Information|Recv|registeration|synced|RxQ|INPROGRESS|synchronization|Done|asa_cmd_server|Data|SUBSCRIBE|pass_count|encap|flowctl|initial)\b
+  color: f#6CFF00
+
+- description: ASA/FXOS/FTD Keywords (#8a75ff)(#c485ff)
+  regex: (?i)\b(vethifindex|lvethifindex|Wattage|Capacity|buffered|STUN|MENU|queue|queues|members|Member|PCIe|System|octeth[0-9]|base|AAA_ProcSvrResp|memberOf|Mapping|Firewall|rule_action|matched|dsize|Disposition|score|IPS|issuer|ACP|heimdall_pid|size|partitions|POE|AGs|PPID|ethernet|Cookie|scheduler|eq|ca|transactionId|Preparing|UMPD|Export|GID|commit|unified_events|RuleParser|SRUDBUpdateService|SWVERSION|FTD_CSP_ID|SHORT_MODEL|vlanport|SrcClass|policer_type|admin_mtu|Nitrox|OID)\b
+  color: f#8e7aff
+  # color: f#8a75ff
+
+- description: ASA/FXOS/FTD Keywords (#a94dff)
+  regex: (?i)\b(operProgress|idfw_proc|5Sec|15Sec|xmit|e_mac|filling|algorithm|ifindex|indexes|SCSI|random|generating|AAA_MSG_PROCESS|DC|fqdns_file|Category|PPM|Unified2|offset|SpannedCluster|cluster_mode|LacpFastTimer|intf|spanned_mode|loopback|ifc_in|Storing|store|minimum|aging|SID|DeploymentStatusProcessor|absolute|VDB|regions|RuleClassification|skipping|detectionhealthd|logmonitor|revision|type|Found|changeto|performance|wrote|WAIT_LINKUP|Medium|usd|Logins|REF_COUNT|EntryP|Registers)\b
+  color: f#82fad8
+
+- description: FTD/ASA matches keyword
+  regex: (?i)\b(Preprocessor|throughput|zone|zones|url|urls|Stream|interval|curl|CApath|CAfile|SOF|filepolicy|urlrep|cURL|Directory|Parsing|policyOwner|dmesg|Source|sam_licenseAG|reportEr|basedir|KERN|CARRIER|CluChassisId|sysopt|ak47|revert-save|SHOW_XML_RESPONSE|Final|OSVERSION|commencing|offbox|CNT|smart|split|PACKET_COUNT|HBRecordList|DPD|AccessControlRuleAction|DNP3|mac_addr)\b
+  color: bold f#00f2ff
+
+- description: Generics - TCP-Pink
+  regex: (TCP|tcp|translations|http_bypass|flowstart|name|Name|Original|original|perfstats|debug_lina|replay|boot_img|last_op|DeviceUUID|ACPolicy|ICMPCode|AccessControlRuleReason|vtcam-tti|milliseconds|Normalize|FTPTelnet|PortVar|peer_uuid|file_location|Matches)
+  color: bold f#ffbfff
+
+- description: FTD-CSM-ACL matches keyword
+  regex: (CSM_FW_ACL|UM_STATIC_TCP_MAP|snp_fp_snort|snp_ifc_stat|EXTERNAL|URL|MidRecovery|NODELAY|Netsnmp|netsnmp|sip_pto|anyconnect|AnyConnect|SPEED_40GB|SPEED_25GB|MODE_DISABLED|CPU_TYPE|RESET_REASON|MAC_BLOCK|VTCAM_RULE_ID|badOctetsRcv|dropCounter|ICMPType|Frag3|ClamUpd|hit-cnt)
+  color: bold f#ff4085
+
+- description: Generics - good -light Green
+  regex: (?i)\b(com|freeb|priority|REUSE|from|NSSA|area|Built|revision|IRQ|Serial|Appliance|modified|Task|branch|Record|custom-attr|Classification|mctool|pktcap|Finish|pushing|signalDetected|SWDRV|Direction|Pre|Header|computed|list|Desc|Soft|fifo|Transition|retries|exist|expect|attached|smSlot|pack|isSystemUpgrading|Present|Standard|Public|Normal|use|starts|start)\b
+  # color: f#a3be8c
+  color: f#a9c791
+
+- description: Generics-2
+  regex: (?i)\b(CSC[a-zA-Z0-9]{1,7}|mac_address|Idprom|SFP|SFPs|bandwidth|SED|Ring[0-9]|ring|isPlatformPackSet|getInfraPackItemVersion|smAppInstance|prepar|preDowngrade|prevOperState|Hypervisor|Requirement|routed|GCM|device|pwdReset|accountStatus|Author|JibxXMLUtility|IPv4|DstPort|NAPPolicy|AccessControlRuleName|POP|IMAP)\b
+  color: bold f#0dbaff
+
+- description: Generics
+  regex: (STATE_UP|STATE_ENABLED|DUPLEX_FULL|linkChange|goodOctetsRcv|CircuitResetSuccess|SMAHEARTBEAT|RunningVersion|ALLOWED|Allowed|trusted|Operational|operStatus|snd|ZMQ|zmq|IngressZone|Locale|HttpInspect)
+  color: bold f#00F969
+
+- description: Generics-3
+  regex: (?i)\b(nic|Undersize|Deferred|FID|tag[0-5]|Trap|Overhead|queuing|Archived|Archive|find2DistMo|checkResetOnUpgrade|preDowngra|preDowngr|fs|preDowngradeCheck|prepareDeployOsFsm|serviceState|developmentPhase|undiscovered|ipspolicy|Properties|pwd|sensord|Authenticate|TLSv1\.2|DTLSv1\.2|DTLSv1|validated|Chain|Fastpath|ConnectionDuration|EgressZone|Fast-path|Sensitive|Alerts|SoftNP|RSA)\b
+  color: bold f#ff9830
+
+- description: Generics
+  regex: (?i)\b(Protocol|IPReputationSICategory|minute|minutes|sunrp|sunrpc|Bots|Total|SSLPP|rpc|GTP)\b
+  # color: bold f#d984ed
+  color: bold f.type-3
