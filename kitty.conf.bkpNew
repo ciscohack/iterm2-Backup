@@ -1,0 +1,404 @@
+# vim:fileencoding=utf-8:foldmethod=marker:foldlevel=0
+
+# Offcial Reference: https://sw.kovidgoyal.net/kitty/conf/
+# https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
+# https://erwin.co/kitty-and-nerd-fonts/#symbols
+
+#: Shell {{{
+
+shell /usr/local/bin/ct /bin/zsh --login
+# term xterm-kitty
+term xterm-256color
+
+#: }}}
+
+#: Fonts {{{
+
+font_family  SF Mono
+font_size 14
+
+### OperatorMono Font ###
+
+# font_family         OperatorMonoLig-Book
+# bold_font           OperatorMonoLig-Medium
+# italic_font         OperatorMonoLig-BookItalic
+# bold_italic_font    OperatorMonoLig-MediumItalic
+
+### OperatorMono Font ###
+
+# font_family  OperatorMonoLig-Medium
+# bold_font    OperatorMono-Medium
+# italic_font  OperatorMonoLig-MediumItalic
+# bold_italic_font OperatorMonoLig-BookItalic
+
+### FiraCode Font ###
+
+# font_family         FiraCode-Regular
+# bold_font           FiraCode-Medium
+# italic_font         SFMono-MediumItalic
+# bold_italic_font    SFMono-SemiboldItalic
+# font_features FiraCode-Retina +zero
+box_drawing_scale 0.001, 1, 1.5, 2
+
+### NotosansMono Font ###
+
+# font_family      NotoSansMonoNerdFontComplete-SemiCondensedMedium
+# italic_font      NotoSansMonoNerdFontComplete-SemiBold
+# bold_font        NotoSansMonoNerdFontComplete-Medium
+# bold_italic_font NotoSansMonoNerdFontComplete-SemiBold
+
+adjust_line_height    4
+# adjust_column_width  -1
+# adjust_baseline -1
+
+# adjust_line_height  120%
+# adjust_column_width 110%
+
+macos_thicken_font 0.4
+disable_ligatures never
+
+#: }}}
+
+#: Cursor customization {{{
+
+cursor            #fbf1c7
+cursor_text_color background
+
+cursor_shape beam
+# cursor_beam_thickness 1.5
+# cursor_underline_thickness 2.0
+
+cursor_beam_thickness 6
+cursor_underline_thickness 4.0
+
+cursor_blink_interval 0
+cursor_stop_blinking_after 15.0
+
+#: }}}
+
+#: Scrollback {{{
+
+scrollback_pager less --chop-long-lines --RAW-CONTROL-CHARS -M -i -j5 +INPUT_LINE_NUMBER
+
+#: }}}
+
+#: Mouse {{{
+
+mouse_hide_wait 1
+url_color #8be9fd
+url_style curly
+
+#: }}}
+
+#: Window layout {{{
+
+# window_logo_path window-logo.png
+# window_logo_alpha 0.15
+window_logo_path krishna00.png
+window_logo_alpha 0.15
+window_logo_position top-right
+window_logo_position bottom-right
+enabled_layouts splits,stack
+
+active_border_color #00ff00
+inactive_border_color #cccccc
+bell_border_color #ff5a00
+
+hide_window_decorations yes
+macos_quit_when_last_window_closed yes
+draw_minimal_borders yes
+
+#: Color scheme {{{
+
+# background_opacity 0.97
+dynamic_background_opacity no
+
+foreground #fbf1c7
+background #031417
+
+selection_foreground #928374
+selection_background #ebdbb2
+
+#: The color table {{{2
+
+# black
+color0  #031417
+color8  #7c6f64
+
+# red
+color9  #cc241d
+color1  #fb4934
+
+# green
+color10  #98971a
+color2 #b8bb26
+
+# yellow
+color11  #e6a425
+color3 #fabd2f
+
+# blue
+color12  #458588
+color4 #83a598
+
+# magenta
+color13  #b16286
+color5 #d3869b
+
+# cyan
+color14  #689d6a
+color6 #8ec07c
+
+# white
+color7  #a89984
+color15 #fbf1c7
+
+# extended colors
+color16 #fd971f
+color17 #fb4934
+
+### Mark text on screen ###
+
+mark1_foreground #282a36
+mark1_background #fb4934
+mark2_foreground #689d6a
+mark2_background #031417
+mark3_foreground #031417
+mark3_background #d3869b
+
+#: }}}
+
+#: }}}
+
+#: OS specific tweaks {{{
+
+macos_option_as_alt left
+macos_show_window_title_in window
+shell_integration enabled
+env PAGER=bat
+
+#: }}}
+
+#: Keyboard shortcuts {{{
+
+kitty_mod ctrl+shift
+clear_all_shortcuts yes
+
+#: Clipboard {{{
+
+map cmd+c copy_to_clipboard
+map cmd+v paste_from_clipboard
+
+#: }}}
+
+#: Scrolling {{{
+
+map kitty_mod+y scroll_line_up
+map kitty_mod+e scroll_line_down
+map kitty_mod+b scroll_page_up
+map kitty_mod+f scroll_page_down
+map kitty_mod+left scroll_home
+map kitty_mod+right scroll_end
+
+map kitty_mod+s>h show_scrollback
+map kitty_mod+s>n scroll_to_prompt 1
+map kitty_mod+s>p scroll_to_prompt -1
+map kitty_mod+s>l show_last_command_output
+map f1 launch --stdin-source=@last_cmd_output --stdin-add-formatting --type=window less +G -R
+
+
+#: }}}
+
+# what counts as a word
+select_by_word_characters :@-./_~?&=%+#
+
+# broadcast in all open pane
+map F4 launch --allow-remote-control kitty +kitten broadcast
+
+# Allow Hyperlink in Kitty
+allow_hyperlinks yes
+
+
+#: }}}
+
+#: Tab bar {{{
+
+# tab_bar_min_tabs 1
+
+tab_bar_style powerline
+tab_separator " ┇"
+tab_powerline_style angled
+
+tab_activity_symbol " "
+
+tab_title_template  {fmt.bold}{fmt.fg._0000ff}{index}{fmt.fg.default}{fmt.nobold}: {fmt.fg._ffe100}{activity_symbol}{fmt.fg.default}{title}
+active_tab_title_template {fmt.fg._fb4934} {fmt.fg.default}{fmt.fg._0000ff}{index}{fmt.fg.default}: {title}
+
+active_tab_foreground   #fbf1c7
+active_tab_background   #665c54
+inactive_tab_foreground #a89984
+inactive_tab_background #3c3836
+active_tab_font_style   bold-italic
+inactive_tab_font_style normal
+
+tab_bar_background none
+tab_bar_margin_color none
+
+#: }}}
+
+#: Window management {{{
+
+map kitty_mod+enter new_window
+map cmd+n new_os_window
+map kitty_mod+w close_window
+map kitty_mod+o close_other_windows_in_tab
+
+map kitty_mod+x launch --location=hsplit
+map kitty_mod+v launch --location=vsplit
+
+map kitty_mod+k neighboring_window up
+map kitty_mod+j neighboring_window down
+map kitty_mod+h neighboring_window left
+map kitty_mod+l neighboring_window right
+
+map kitty_mod+p nth_window -1
+
+map kitty_mod+1 first_window
+map kitty_mod+2 second_window
+map kitty_mod+3 third_window
+map kitty_mod+4 fourth_window
+map kitty_mod+5 fifth_window
+map kitty_mod+6 sixth_window
+map kitty_mod+7 seventh_window
+map kitty_mod+8 eighth_window
+map kitty_mod+9 ninth_window
+map kitty_mod+0 tenth_window
+
+map kitty_mod+` move_window_to_top
+map cmd+r start_resizing_window
+
+map kitty_mod+- focus_visible_window
+map cmd+s swap_with_window
+
+#: }}}
+
+#: Tab management {{{
+
+map cmd+t new_tab
+map cmd+w close_tab
+
+map kitty_mod+] next_tab
+map kitty_mod+[ previous_tab
+
+map cmd+1 goto_tab 1
+map cmd+2 goto_tab 2
+map cmd+3 goto_tab 3
+map cmd+4 goto_tab 4
+map cmd+5 goto_tab 5
+map cmd+6 goto_tab 6
+map cmd+7 goto_tab 7
+map cmd+8 goto_tab 8
+map cmd+9 goto_tab 9
+
+map kitty_mod+. move_tab_forward
+map kitty_mod+, move_tab_backward
+
+map kitty_mod+t set_tab_title
+
+#: }}}
+
+#: Layout management {{{
+
+map kitty_mod+z toggle_layout stack
+
+#: }}}
+
+#: Font sizes {{{
+
+map cmd+equal change_font_size all +1.0
+map cmd+plus change_font_size all +1.0
+map cmd+minus change_font_size all -1.0
+map cmd+0 change_font_size all 0
+
+#: }}}
+
+#: Select and act on visible text (the Hints kitten) {{{
+
+map kitty_mod+i>u open_url_with_hints
+
+# Select a path/filename and open it with the default open program
+map kitty_mod+i>o kitten hints --type path
+
+# Select a path/filename and insert it into the terminal
+map kitty_mod+i>p kitten hints --type path --program -
+
+# Select a hyperlink (e.g., with ls --hyperlink=auto, we can open an item via
+# the defined application)
+map kitty_mod+i>l kitten hints --type hyperlink
+
+#: }}}
+
+#: Miscellaneous {{{
+
+map kitty_mod+m toggle_maximized
+map kitty_mod+escape kitty_shell window
+
+map cmd+, edit_config_file
+map ctrl+cmd+, load_config_file
+
+map ctrl+cmd+space kitten unicode_input
+
+map shift+enter send_text all \x1b[13;2u
+map ctrl+enter send_text all \x1b[13;5u
+
+#: }}}
+
+#: }}}
+
+#: Performance {{{
+
+repaint_delay 16
+input_delay 3
+# sync_to_monitor no
+
+#: }}}
+
+#: trigger {{{
+
+# Mark text on screen (highlight both ERROR and WARNING, case insensitively)
+map f4 toggle_marker iregex 1 \\bERROR\\b 2 \\bWARNING\\b
+
+# Creating markers dynamically
+map f2 create_marker
+map f3 remove_marker
+
+# Scrolling to marks
+map ctrl+p scroll_to_mark prev
+map ctrl+n scroll_to_mark next
+map ctrl+1 scroll_to_mark prev 1
+
+# Dynamically Script to mark keyword
+map f5 toggle_marker function ~/.config/kitty/mymarker.py
+
+#: }}}
+
+#: Theme {{{
+
+# https://github.com/kovidgoyal/kitty-themes
+# vim:ft=kitty
+# include ./zenwritten_dark.conf
+# include themes/tokyo-night-kitty.conf
+
+# include themes/duckbones.conf
+# include ./Origamid-Dark-2.conf
+include ./Origamid-Dark-3.conf
+# include themes/Duotone_Dark.conf
+# include themes/catppuccin.conf
+# include themes/ChallengerDeep.conf
+# include themes/kanagawa.conf
+
+symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0C8,U+E0CA,U+E0CC-U+E0D2,U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E62F,U+E700-U+E7C5,U+F000-U+F2E0,U+F300-U+F31C,U+F400-U+F4A9,U+F500-U+F8FF Symbols Nerd Font
+
+# symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineExtraSymbols
+
+#: }}}
