@@ -46,7 +46,8 @@ alias bs='br --sizes'
 # SilverSearch-AG with patterns
 # alias ag="ag $* --pager 'less -R'"
 # alias ag="ag $* --pager 'bat' 2>/dev/null"
-alias ag="ag --color-path "1;32" --color-match "30;41" --color-line-number "2;33" $* --pager 'bat' 2>/dev/null"
+# alias ag="ag --color-path '1;32' --color-match '30;41' --color-line-number '2;33' $* --pager 'bat' 2>/dev/null"
+alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32' $* --pager 'bat' 2>/dev/null"
 
 # neofetch
 # alias neo='neofetch'
@@ -122,3 +123,15 @@ alias yta-opus="youtube-dl --extract-audio --audio-format opus "
 alias yta-vorbis="youtube-dl --extract-audio --audio-format vorbis "
 alias yta-wav="youtube-dl --extract-audio --audio-format wav "
 alias ytv-best="youtube-dl -f bestvideo+bestaudio "
+
+# GNU-Project Tools (https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/)
+alias awk='gawk'
+alias sed='gsed'
+alias which='gwhich'
+alias tar='gtar'
+alias indent='gindent'
+alias find='gfind'
+
+# Short of learning how to actually configure OSX, here's a hacky way to use
+# GNU manpages for programs that are GNU ones, and fallback to OSX manpages otherwise
+alias ma='_() { echo $1; man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1 1>/dev/null 2>&1;  if [ "$?" -eq 0 ]; then man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1; else man $1; fi }; _'

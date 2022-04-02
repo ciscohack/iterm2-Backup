@@ -108,9 +108,10 @@ alias cdl='python -m youtube_dl -s'
 # )'
 
 # # zshall(1) manpage documentation
-zman() {
-  PAGER="less -g -s '+/^       "$1"'" man zshall
-}
+# zman() {
+#   PAGER="less -g -s '+/^       "$1"'" man zshall
+#
+# }
 
 # Move Up in directory
 # up() {
